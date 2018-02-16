@@ -18,8 +18,35 @@ const selectAll = function(callback) {
   });
 };
 
+const getOneVideo = (callback) => {
+  connection.query('SELECT id FROM videos WHERE RAND()<=0.0006 limit 1', (err, results) => {
+    if(err){
+      callback(err, null);
+    } else {
+      callback(null, results);
+    }
+  });
+}
+
+//update maxvote count after winner is decided
+const updateMaxVotes = (id, voteCount, callback) => {
+  connection.query(`INSERT INTO videos SET max_votes = ${voteCount} WHERE id=${id} and max_vote > ${voteCount}`, (err, results) => {
+    if(err){
+      callback(err, null);
+    } else {
+      callback(null, results);
+    }
+  });
+
+};
+
+
+
+//add once everything else is done to have users upload more videos to DB
 const insertIntoVideoTable = function(callback) {
 
 };
+
+
 
 module.exports.selectAll = selectAll;

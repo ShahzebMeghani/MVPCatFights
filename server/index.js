@@ -1,7 +1,7 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-
-var items = require('../database-mysql');
+const express = require('express');
+const bodyParser = require('body-parser');
+const db = require('../database-mysql/index.js');
+// var items = require('../database-mysql');
 
 
 var app = express();
@@ -9,7 +9,10 @@ var app = express();
 //don't think I'll need to use
 // app.use(express.static(__dirname + '/../react-client/dist'));
 
+let videoList = [];
+const getMoreVideos = () => {
 
+};
 
 
 app.get('/videos', function (req, res) {
