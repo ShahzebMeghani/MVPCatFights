@@ -1,5 +1,5 @@
 import React from 'react';
-import ListItem from './ListItem.jsx';
+import ListItem from './Video.jsx';
 
 const List = (props) => (
   <div>

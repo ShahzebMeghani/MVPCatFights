@@ -1,34 +1,61 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import axios from 'axios';
 import $ from 'jquery';
-import List from './components/List.jsx';
+import Video from './components/Video.jsx';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { 
-      items: []
+    this.state = {
+      video1: {
+        url: '',
+        votes: 0,
+        hasBeenVoted: false
+      },
+      video2: {
+        url: '',
+        votes: 0,
+        hasBeenVoted: false
+      },
+
+      votingRoundTimeLeft: 0
+    };
+
+    this.voteUp = this.voteUp.bind(this);
+
+  }
+
+  voteUp(url) {
+    if(this.state.video1.hasBeenVoted === true || this.state.video2.hasBeenVoted === true) {
+      alert('Can only vote once!');
+    } else {
+      //if urls match then send out post request updating the count
+      if(this.state.video1.url === url) {
+
+      } else if(this.state.video2.url === url){
+
+      }
     }
   }
 
   componentDidMount() {
-    $.ajax({
-      url: '/items', 
-      success: (data) => {
-        this.setState({
-          items: data
+    axios.get('/videos')
+        .then(function (res) {
+          console.log(res);
         })
-      },
-      error: (err) => {
-        console.log('err', err);
-      }
+        .catch(function (err) {
+          console.log('err', err);
     });
   }
 
   render () {
     return (<div>
-      <h1>Item List</h1>
-      <List items={this.state.items}/>
+      <h1>Cat Fight!</h1>
+      <Video video={this.state.video1} voteUp={this.voteUp}/>
+      <Video video={this.state.video2} voteUp={this.voteUp}/>
+      {/*Make timer component*/}
+      {/*{this.state.votingRoundTimeLeft}*/}
     </div>)
   }
 }
