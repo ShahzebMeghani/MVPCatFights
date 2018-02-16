@@ -26,6 +26,11 @@ class App extends React.Component {
 
   }
 
+  //impletment function to get videos from server
+  fetchVideos() {
+
+  }
+
   voteUp(url) {
     if(this.state.video1.hasBeenVoted === true || this.state.video2.hasBeenVoted === true) {
       alert('Can only vote once!');
