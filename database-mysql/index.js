@@ -1,10 +1,11 @@
 var mysql = require('mysql');
+var config = reuquire('../config.js');
 
 var connection = mysql.createConnection({
-  host     : 'localhost',
+  host     : 'localhost:3306',
   user     : 'root',
-  password : '',
-  database : 'test'
+  password : config.DBPASSWORD,
+  database : 'catfight'
 });
 
 var selectAll = function(callback) {

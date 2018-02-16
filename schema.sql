@@ -1,13 +1,13 @@
-DROP DATABASE IF EXISTS test;
+DROP DATABASE IF EXISTS catfight;
 
-CREATE DATABASE test;
+CREATE DATABASE catfight;
 
-USE test;
+USE catfight;
 
-CREATE TABLE items (
+CREATE TABLE videos (
   id int NOT NULL AUTO_INCREMENT,
-  quantity integer NOT NULL,
-  description varchar(50) NOT NULL,
+  max_votes integer,
+  url varchar(255) NOT NULL,
   PRIMARY KEY (ID)
 );
 
