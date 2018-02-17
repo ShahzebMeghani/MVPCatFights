@@ -24,18 +24,7 @@ const app = express();
 const init = () => {
   for(let i = 0; i < 5; i++) {
     console.log('videoList.length', videoList.length);
-    db.getOneVideo((err, data) => {
-      if(err){
-        console.log('Got err', err);
-      } else {
-        // console.log('data', data);
-        // console.log('videoList before insert', videoList);
-        console.log('videoList.length', videoList.length);
-        if(!videoList.includes(data)) {
-          videoList.push({'id': data, 'votes': 0});
-        }
-      }
-    });
+    addOneVideoToVideoList();
   }
 };
 
@@ -47,6 +36,8 @@ const votingSession = () => {
 
 const removeLoserVideo = () => {
   //remove loser
+  console.log('vote video 0', videoList[0].votes);
+  console.log('vote video 1', videoList[1].votes);
   if(videoList[0].votes > videoList[1].votes) {
     videoList.splice(1, 1);
   } else {
@@ -55,8 +46,23 @@ const removeLoserVideo = () => {
   //reset vote count
   videoList[0].votes = 0;
   videoList[1].votes = 0;
+  console.log('videoList after removed', videoList);
 };
 
+const addOneVideoToVideoList = () => {
+  db.getOneVideo((err, data) => {
+    if(err){
+      console.log('Got err', err);
+    } else {
+      // console.log('data', data);
+      // console.log('videoList before insert', videoList);
+      console.log('videoList.length', videoList.length);
+      if(!videoList.includes(data)) {
+        videoList.push({'id': data[0].id, 'votes': 0});
+      }
+    }
+  });
+};
 
 const addVideoToVideoList = () => {
   //don't need to update full array if only removing one
@@ -66,33 +72,30 @@ const addVideoToVideoList = () => {
 //   for(let i = 0; i < 5; i++) {
 
     console.log('videoList.length', videoList.length);
-    db.getOneVideo((err, data) => {
-      if(err){
-        console.log('Got err', err);
-      } else {
-        // console.log('data', data);
-        // console.log('videoList before insert', videoList);
-        console.log('videoList.length', videoList.length);
-        if(!videoList.includes(data)) {
-          videoList.push({'id': data, 'votes': 0});
-        }
-      }
-    });
+    addOneVideoToVideoList();
   // }
 
 };
 
 let videoList = [];
 let timer = 5 * 60 * 1000; //minutes seconds milliseconds = 5 minutes
-let addVideoTimer = setInterval(votingSession, timer);
 
 init();
-addVideoTimer();
+
+
+let addVideoTimer = setInterval(votingSession, timer);
+
+
 
 
 //will retrieve current list of videos
 // TODO and give remaining time left to vote
 app.get('/videos', function (req, res) {
+  let videoInformation = {
+    video1: videoList[0],
+    video2: videoList[1]
+  };
+  res.send(videoInformation);
 
   // items.selectAll(function(err, data) {
   //   if(err) {
@@ -102,6 +105,8 @@ app.get('/videos', function (req, res) {
   //   }
   // });
 });
+
+let testVideoList = [{id: 'WP4Uh66FA3A', votes: 0}];
 
 //when user votes will update the vote for the video on the VideoList array
 app.post('/vote', function(req, res) {
