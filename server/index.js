@@ -4,7 +4,7 @@ const db = require('../database-mysql/index.js');
 // var items = require('../database-mysql');
 
 
-var app = express();
+const app = express();
 
 //don't think I'll need to use
 // app.use(express.static(__dirname + '/../react-client/dist'));
@@ -22,13 +22,31 @@ var app = express();
 
 let videoList = [];
 let timer = 5 * 60 * 1000; //minutes seconds milliseconds = 5 minutes
-let addVideoTimer = setInterval(addVideoToVideoList, timer);
+let addVideoTimer = setInterval(votingSession, timer);
+
+const init = () => {
+  for(let i = 0; i < 5; i++) {
+    console.log('videoList.length', videoList.length);
+    db.getOneVideo((err, data) => {
+      if(err){
+        console.log('Got err', err);
+      } else {
+        // console.log('data', data);
+        // console.log('videoList before insert', videoList);
+        console.log('videoList.length', videoList.length);
+        if(!videoList.includes(data)) {
+          videoList.push({'id': data, 'votes': 0});
+        }
+      }
+    });
+  }
+};
 
 const votingSession = () => {
   removeLoserVideo();
   addVideoToVideoList();
 
-}
+};
 
 const removeLoserVideo = () => {
   //remove loser
@@ -40,7 +58,7 @@ const removeLoserVideo = () => {
   //reset vote count
   videoList[0].votes = 0;
   videoList[1].votes = 0;
-}
+};
 
 
 const addVideoToVideoList = () => {
@@ -65,12 +83,14 @@ const addVideoToVideoList = () => {
     });
   // }
 
-}
+};
 
-
+init();
+addVideoTimer();
 
 //will retrieve current list of videos and give remaining time left to vote
 app.get('/videos', function (req, res) {
+
   // items.selectAll(function(err, data) {
   //   if(err) {
   //     res.sendStatus(500);
