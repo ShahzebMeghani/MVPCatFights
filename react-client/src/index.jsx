@@ -26,16 +26,25 @@ class App extends React.Component {
 
   }
 
-  voteUp(url) {
+  voteUp(id) {
+    // e.preventDefault();
     if(this.state.hasBeenVoted) {
       alert('Can only vote once!');
     } else {
       //if urls match then send out post request updating the count
-      if(this.state.video1.url === url) {
-        axios.post()
-      } else if(this.state.video2.url === url){
-
+      if(this.state.video1 === id) {
+        this.setState({
+          video1votes: this.state.video1votes + 1,
+          hasBeenVoted: true
+        })
+      } else if(this.state.video2 === id){
+        this.setState({
+          video2votes: this.state.video2votes + 1,
+          hasBeenVoted: true
+        })
       }
+      //finish post
+      // axios.post();
     }
   }
 
@@ -59,9 +68,9 @@ class App extends React.Component {
     return (<div>
       <h1>Cat Fight!</h1>
       <Video video={this.state.video1}/>
-      <Vote voteUp={this.voteUp} video={this.state.video1} votes={this.state.video1votes}/>
+      <Vote voteUp={this.voteUp} video={this.state.video1} votes={this.state.video1votes} />
       <Video video={this.state.video2} />
-      <Vote voteUp={this.voteUp} video={this.state.video2} votes={this.state.video2votes}/>
+      <Vote voteUp={this.voteUp} video={this.state.video2} votes={this.state.video2votes} />
       {/*Make timer component*/}
       {/*{this.state.votingRoundTimeLeft}*/}
     </div>)
