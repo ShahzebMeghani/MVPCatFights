@@ -5,7 +5,7 @@ const db = require('../database-mysql/index.js');
 
 
 const app = express();
-
+const jsonParser = bodyParser.json();
 //don't think I'll need to use
 // app.use(express.static(__dirname + '/../react-client/dist'));
 
@@ -57,13 +57,16 @@ const addOneVideoToVideoList = () => {
       // console.log('data', data);
       // console.log('videoList before insert', videoList);
       console.log('videoList.length', videoList.length);
-      if(!videoList.includes(data)) {
+      if(!videoList.includes(data[0])) {
+        console.log('detect if data matches whats in the video list ', data);
         videoList.push({'id': data[0].id, 'votes': 0});
+        console.log(videoList);
       }
     }
   });
 };
 
+//TODO remove duplicates in VideoList
 const addVideoToVideoList = () => {
   //don't need to update full array if only removing one
 //PROBLEM WITH USING WHILE LOOP AND THE OTHER FOR LOOP (WON'T UPDATE THE VIDEOLIST ARRAY)
@@ -96,21 +99,18 @@ app.get('/videos', function (req, res) {
     video2: videoList[1]
   };
   res.send(videoInformation);
-
-  // items.selectAll(function(err, data) {
-  //   if(err) {
-  //     res.sendStatus(500);
-  //   } else {
-  //     res.json(data);
-  //   }
-  // });
 });
 
 let testVideoList = [{id: 'WP4Uh66FA3A', votes: 0}];
 
 //when user votes will update the vote for the video on the VideoList array
-app.post('/vote', function(req, res) {
-
+app.post('/vote', jsonParser, function(req, res) {
+  console.log('testVideoList[0][id] ', testVideoList[0]['id']);
+  if(req.body.id === testVideoList[0]['id']){
+    testVideoList[0]['votes']++;
+  }
+  console.log('CURRENT VOTES: ', testVideoList[0]['votes']);
+  res.sendStatus(200);
 });
 
 app.listen(3000, function() {
