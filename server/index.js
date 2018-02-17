@@ -20,9 +20,6 @@ const app = express();
 //   })
 // };
 
-let videoList = [];
-let timer = 5 * 60 * 1000; //minutes seconds milliseconds = 5 minutes
-let addVideoTimer = setInterval(votingSession, timer);
 
 const init = () => {
   for(let i = 0; i < 5; i++) {
@@ -85,10 +82,16 @@ const addVideoToVideoList = () => {
 
 };
 
+let videoList = [];
+let timer = 5 * 60 * 1000; //minutes seconds milliseconds = 5 minutes
+let addVideoTimer = setInterval(votingSession, timer);
+
 init();
 addVideoTimer();
 
-//will retrieve current list of videos and give remaining time left to vote
+
+//will retrieve current list of videos
+// TODO and give remaining time left to vote
 app.get('/videos', function (req, res) {
 
   // items.selectAll(function(err, data) {
