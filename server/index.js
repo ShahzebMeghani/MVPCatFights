@@ -7,7 +7,7 @@ const db = require('../database-mysql/index.js');
 const app = express();
 const jsonParser = bodyParser.json();
 //don't think I'll need to use
-// app.use(express.static(__dirname + '/../react-client/dist'));
+app.use(express.static(__dirname + '/../react-client/dist'));
 
 
 // const getMoreVideos = () => {

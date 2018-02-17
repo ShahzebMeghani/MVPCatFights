@@ -3,16 +3,14 @@ import React from 'react';
 class Video extends React.Component {
   constructor(props) {
     super(props);
-
-
+    console.log(this.props);
   }
 
 render() {
+    let embed = 'https://www.youtube.com/embed/' + this.props.video + '?autoplay=0';
   return(
       <div>
-        {props.video.url} <br />
-        {props.video.votes} <br />
-        <button onClick={this.props.handleClick}>Click to vote</button>
+        <iframe src={embed}></iframe> <br />
       </div>
   )
 }
