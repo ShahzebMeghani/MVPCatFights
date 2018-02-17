@@ -2,7 +2,7 @@ const mysql = require('mysql');
 const config = require('../config.js');
 
 const connection = mysql.createConnection({
-  host     : 'localhost:3306',
+  host     : '',
   user     : 'root',
   password : config.DBPASSWORD,
   database : 'catfight'
@@ -19,14 +19,18 @@ const selectAll = function(callback) {
 };
 
 const getOneVideo = (callback) => {
-  connection.query('SELECT id FROM videos WHERE RAND()<=0.0006 limit 1', (err, results) => {
+  // console.log('inside getOneVideo');
+  connection.query('SELECT id FROM videos ORDER BY RAND() limit 1', (err, results) => {
+    console.log('inside getOneVideo after query');
     if(err){
+      // console.log(err);
       callback(err, null);
     } else {
+      // console.log(results);
       callback(null, results);
     }
   });
-}
+};
 
 //update maxvote count after winner is decided
 const updateMaxVotes = (id, voteCount, callback) => {
@@ -50,3 +54,5 @@ const insertIntoVideoTable = function(callback) {
 
 
 module.exports.selectAll = selectAll;
+module.exports.updateMaxVotes = updateMaxVotes;
+module.exports.getOneVideo = getOneVideo;
