@@ -14,6 +14,7 @@ class App extends React.Component {
       video2: '',
       video2votes: 0,
       hasBeenVoted: false,
+      lastWinner: ''
       // votingRoundTimeLeft: 0 //implement later
     };
 
@@ -25,6 +26,8 @@ class App extends React.Component {
   fetchVideos() {
 
   }
+
+
 
   voteUp(id) {
     // e.preventDefault();
@@ -44,7 +47,19 @@ class App extends React.Component {
         })
       }
       //finish post
-      // axios.post();
+      axios.post('http://127.0.0.1:3000/vote', {
+        id: id
+      })
+      .then( (response) => {
+        console.log('response ', response);
+        this.setState({
+          video1votes: response.data.video1.votes,
+          video2votes: response.data.video2.votes
+        })
+      })
+      .catch( (err) => {
+        console.log('err', err)
+      });
     }
   }
 
@@ -55,7 +70,8 @@ class App extends React.Component {
             video1: res.data.video1.id,
             video2: res.data.video2.id,
             video1votes: res.data.video1.votes,
-            video2votes: res.data.video1.votes
+            video2votes: res.data.video2.votes,
+            lastWinner: res.data.lastWinner
           });
 
         })
@@ -71,6 +87,8 @@ class App extends React.Component {
       <Vote voteUp={this.voteUp} video={this.state.video1} votes={this.state.video1votes} />
       <Video video={this.state.video2} />
       <Vote voteUp={this.voteUp} video={this.state.video2} votes={this.state.video2votes} />
+      <h3>Last Winner</h3>
+      <Video video={this.state.lastWinner} />
       {/*Make timer component*/}
       {/*{this.state.votingRoundTimeLeft}*/}
     </div>)
