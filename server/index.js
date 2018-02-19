@@ -38,15 +38,16 @@ const removeLoserVideo = () => {
   //remove loser
   console.log('vote video 0', videoList[0].votes);
   console.log('vote video 1', videoList[1].votes);
-  if(videoList[0].votes > videoList[1].votes) {
-    lastWinner = videoList.splice(1, 1);
+  if(videoList[0].votes >= videoList[1].votes) {
+    lastWinner = videoList.splice(1, 1).pop();
   } else {
-    lastWinner = videoList.splice(0,1);
+    lastWinner = videoList.splice(0,1).pop();
   }
   //reset vote count
   videoList[0].votes = 0;
   videoList[1].votes = 0;
   console.log('videoList after removed', videoList);
+  console.log('loser', lastWinner);
 };
 
 const addOneVideoToVideoList = () => {
@@ -81,7 +82,8 @@ const addVideoToVideoList = () => {
 };
 
 let videoList = [];
-let timer = 5 * 60 * 1000; //minutes seconds milliseconds = 5 minutes
+// let timer = 5 * 60 * 1000; //minutes seconds milliseconds = 5 minutes
+let timer = 15 * 1000;
 let lastWinner;
 init();
 

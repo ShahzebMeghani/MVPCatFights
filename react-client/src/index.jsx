@@ -19,12 +19,26 @@ class App extends React.Component {
     };
 
     this.voteUp = this.voteUp.bind(this);
-
+    this.fetchVideos = this.fetchVideos.bind(this);
   }
 
   //implement function to get videos from server
   fetchVideos() {
+    axios.get('http://127.0.0.1:3000/videos')
+        .then( (res) => {
+          console.log(res.data);
+          this.setState({
+            video1: res.data.video1.id,
+            video2: res.data.video2.id,
+            video1votes: res.data.video1.votes,
+            video2votes: res.data.video2.votes,
+            lastWinner: res.data.lastWinner.id
+          });
 
+        })
+        .catch(function (err) {
+          console.log('err', err);
+        });
   }
 
 
@@ -64,20 +78,8 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('http://127.0.0.1:3000/videos')
-        .then( (res) => {
-          this.setState({
-            video1: res.data.video1.id,
-            video2: res.data.video2.id,
-            video1votes: res.data.video1.votes,
-            video2votes: res.data.video2.votes,
-            lastWinner: res.data.lastWinner
-          });
-
-        })
-        .catch(function (err) {
-          console.log('err', err);
-    });
+    // this.fetchVideos();
+    setInterval(() => this.fetchVideos(), 5000);
   }
 
   render () {
